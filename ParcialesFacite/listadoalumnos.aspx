@@ -216,7 +216,7 @@
                                               </td>
                                              <td>
                                                  <button style="width:120" class="btn guardar btn-primary" id="<%# Eval("id_grupo_alumno") %>"><i class=" ion-android-done"></i>Guardar</button>
-                                                 <button  style="width:120" class="btn btn-warning Delete"><i class="ion-android-delete"></i>Ignorar</button>
+                                                 <button  style="width:120" class="btn btn-warning Delete" id="d<%# Eval("id_grupo_alumno") %>"><i class="ion-android-delete"></i>Ignorar</button>
                                              </td>
                                             </tr>
                                       </ItemTemplate>
@@ -288,8 +288,37 @@ where id_grupo = @grupo and id_grupo_alumno NOT IN (select grupo_alumno from Eva
             return false;
           }
 
-          $(document).on('click', '.Delete', function () {
-				$(this).parent().parent().remove();
+          $(document).on('click', '.Delete', function (e) {
+              var id = this.id;
+              delid = id.substring(1, id.length);
+              var materia = document.getElementById('qsmateria');
+              var maestro = document.getElementById('qsmaestro');
+              $.ajax({
+                  type: "POST",
+                  url: "capturas.asmx/Ignorar",
+                  data: "grupo_alumno=" + delid + "&materia=" + materia.innerText + "&maestro=" + maestro.innerText, // the data in form-encoded format, ie as it would appear on a querystring
+                  //contentType: "application/x-www-form-urlencoded; charset=UTF-8", // if you are using form encoding, this is default so you don't need to supply it
+                  dataType: "text", // the data type we want back, so text.  The data will come wrapped in xml
+                  success: function (data) {
+                       $.toast({
+                            text: data, // Text that is to be shown in the toast
+                            heading: 'Correcto!', // Optional heading to be shown on the toast
+                            icon: 'success', // Type of toast icon
+                            showHideTransition: 'slide', // fade, slide or plain
+                            allowToastClose: true, // Boolean value true or false
+                            hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                            stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                            position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values         
+                            textAlign: 'left',  // Text alignment i.e. left, right or center
+                            loader: true,  // Whether to show loader or not. True by default
+                            loaderBg: '#9EC600',  // Background color of the toast loader
+                      });
+
+                       
+                  }
+              });
+              $(this).parent().parent().remove();
+              e.preventDefault();
           });
 
           $(document).on('click', '#btn_finalizar', function (event) {
@@ -322,6 +351,7 @@ where id_grupo = @grupo and id_grupo_alumno NOT IN (select grupo_alumno from Eva
               var calificacion = document.getElementById('c' + this.id);
               var porcentaje = document.getElementById('p' + this.id);
               var btn = document.getElementById(this.id);
+              var ignorar = document.getElementById('d' + this.id);
               //alert(calificacion.value);
               //alert(porcentaje.value);
               //grt selected items from listbox
@@ -363,6 +393,7 @@ where id_grupo = @grupo and id_grupo_alumno NOT IN (select grupo_alumno from Eva
                         });
                       btn.disabled = true;
                       btn.innerHTML = "Capturado";
+                      ignorar.disabled = true;
                       calificacion.disabled = true;
                       observaciones.disabled = true;
                       porcentaje.disabled = true;

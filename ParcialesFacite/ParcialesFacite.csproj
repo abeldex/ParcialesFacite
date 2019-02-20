@@ -77,6 +77,9 @@
     <Content Include="admin\Default.aspx" />
     <Content Include="admin\grupos.asmx" />
     <Content Include="admin\grupos.aspx" />
+    <Content Include="admin\info_evaluados.aspx" />
+    <Content Include="admin\info_grupos.aspx" />
+    <Content Include="admin\login.aspx" />
     <Content Include="admin\maestros.asmx" />
     <Content Include="capturados.asmx" />
     <Content Include="capturados.aspx" />
@@ -309,6 +312,27 @@
     </Compile>
     <Compile Include="admin\grupos.aspx.designer.cs">
       <DependentUpon>grupos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\info_evaluados.aspx.cs">
+      <DependentUpon>info_evaluados.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\info_evaluados.aspx.designer.cs">
+      <DependentUpon>info_evaluados.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\info_grupos.aspx.cs">
+      <DependentUpon>info_grupos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\info_grupos.aspx.designer.cs">
+      <DependentUpon>info_grupos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\login.aspx.designer.cs">
+      <DependentUpon>login.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\maestros.asmx.cs">
       <DependentUpon>maestros.asmx</DependentUpon>

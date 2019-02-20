@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="css/icons.min.css" type="text/css">
     <link rel="stylesheet" href="css/main.css" type="text/css">
     <link rel="stylesheet" href="css/responsive.css" type="text/css">
+    <link rel="stylesheet" href="css/jquery.toast.min.css">
 
 </head>
 <body class="panel-data">
@@ -109,7 +110,7 @@
   </nav>
 </header><!-- Side Header -->
 
- <form id="form1" runat="server"  class="form-wrp">
+ <form id="form1" runat="server" class="form-wrp">
 <div class="pg-tp">
     <i class=" ion-android-checkbox"></i>
     <div class="pr-tp-inr">
@@ -168,7 +169,7 @@
                                               <tbody>
                                         </HeaderTemplate>
                                       <ItemTemplate>
-                                         <tr class="is-disabled" id="td<%# Eval("grupo_alumno") %>">
+                                         <tr class="is-disabled" id="td<%# Eval("id_ep") %>">
                                              
                                               <td><div class="o-media">
                                                   <div class="o-media__body">
@@ -177,15 +178,15 @@
                                                   </div>
                                                 </div></td>
                                               <td>
-                                                  <input class="brd-rd5" type="text" id="c<%# Eval("grupo_alumno") %>" value="<%# Eval("calificacion") %>"></td>
+                                                  <input disabled class="brd-rd5" type="text" id="c<%# Eval("id_ep") %>" value="<%# Eval("calificacion") %>"></td>
                                              <td>
-                                                  <input class="brd-rd5" type="text"  id="p<%# Eval("grupo_alumno") %>" value="<%# Eval("asistencia") %>"></td>
-                                              <td>
+                                                  <input disabled class="brd-rd5" type="text"  id="a<%# Eval("id_ep") %>" value="<%# Eval("asistencia") %>"></td>
+                                              <td id="o<%# Eval("id_ep") %>">
                                                   <small><%# Eval("observaciones") %></small>
                                               </td>
                                              <td>
-                                                 <button style="width:120" class="btn guardar btn-primary" id="<%# Eval("grupo_alumno") %>"><i class="ion-edit"></i>Editar</button>
-                                                
+                                                 <button style="width:120" class="btn btn-primary editar" id="<%# Eval("id_ep") %>"><i class="ion-edit"></i>Editar</button>
+                                                 <button style="width:120; display:none" class="btn btn-success guardar" id="g<%# Eval("id_ep") %>"><i class="ion-save"></i>Guardar</button>
                                              </td>
                                             </tr>
                                       </ItemTemplate>
@@ -210,6 +211,70 @@ where materia = @materia and maestro = @maestro and ga.id_grupo = @grupo">
                  
                  </div>
         </div>
+
+                    <div class="col-md-12 col-sm-12 col-lg-12">
+                 <div class="widget grd">
+                         <asp:Repeater ID="Repeater1" runat="server" DataSourceID="SqlDataSourceLista" ClientIDMode="AutoID">
+                                          <HeaderTemplate>
+                                             
+                                           <table class="table table-striped">
+                                              <thead >
+                                                <tr>
+                                                  <th style="text-align:center"><b>Carrera</b></th>
+                                                  <th style="text-align:center"><b>Semestre</b></th>
+                                                  <th style="text-align:center"><b>Grupo</b></th>
+                                                  <th style="text-align:center"><b>Turno</b></th>
+                                                  <th style="text-align:center"><b>Alumnos Asignados</b></th>
+                                                  <th style="text-align:center"><b>Profesores Asignados</b></th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                        </HeaderTemplate>
+                                      <ItemTemplate>
+                                         <tr class="is-disabled" id="td<%# Eval("id_grupo") %>">
+                                             
+                                              <td><div class="o-media">
+                                                  <div class="o-media__body">
+                                                    <small><b><%# Eval("NombreCarrera") %></b></small>
+                                                  </div>
+                                                </div></td>
+                                              <td>
+                                                 <small> <%# Eval("Semestre") %></small>
+                                              </td>
+                                             <td>
+                                                 <small> <%# Eval("grupo") %></small></td>
+                                              <td>
+                                                 <small> <%# Eval("turno") %></small>
+                                              </td>
+                                             <td>
+                                                 <small> <%# Eval("alumnos_asignados") %></small>
+                                             </td>
+                                             <td>
+                                                 <small> <%# Eval("maestros_asignados") %></small>
+                                             </td>
+                                            </tr>
+                                      </ItemTemplate>
+                                       <FooterTemplate>
+                                        </tbody>
+                                        </table>
+                                           </FooterTemplate>
+                                  </asp:Repeater>
+                            <asp:SqlDataSource runat="server" ID="SqlDataSource1" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="
+SELECT Grupos_Alumnos.id_grupo,Carrera.NombreCarrera, Grupos.Semestre, Grupos.grupo, Grupos.turno, count(*) as 'alumnos_asignados', (SELECT count(*) FROM Maestros_grupos WHERE id_grupo = Grupos_Alumnos.id_grupo) as 'maestros_asignados' 
+FROM Grupos_Alumnos 
+inner join Grupos on Grupos_Alumnos.id_grupo = Grupos.id_grupo
+inner join Carrera on Grupos.carrera = Carrera.idCarrera
+group by Carrera.NombreCarrera, Grupos.Semestre, Grupos_Alumnos.id_grupo, Grupos.grupo, Grupos.turno
+order by  Grupos.Semestre">
+                                       
+                            </asp:SqlDataSource>                   
+                        
+                 
+                 </div>
+        </div>
+
+
+
       </div>
 
 </div><!-- Panel Content -->
@@ -247,5 +312,125 @@ where materia = @materia and maestro = @maestro and ga.id_grupo = @grupo">
     <script src="js/jquery.poptrox.min.js" type="text/javascript"></script>
     <script src="js/styleswitcher.js" type="text/javascript"></script>
     <script src="js/main.js" type="text/javascript"></script>
+    <script src="js/jquery.toast.min.js"></script>
+   
+
+    <script>
+        $(document).on('click', '.editar', function (e) {
+            //obtener el id del boton
+            var id = this.id;
+            
+            //var obs = $('#o' + id).text();
+            //habilitar las cajas de text
+            $('#c' + id).prop("disabled", false);
+            $('#a' + id).prop("disabled", false);
+            
+            apnd = '<span id="list_observaciones"> ' + 
+                                                        '<span class="rdio-bx">' + 
+                                                        '    <input class="c-choice__input" id="checkbox1'+id+'" type="checkbox" name="c'+id+'" value="Llega tarde con frecuencia">' + 
+                                                        '      <label class="c-choice__label" for="checkbox1'+id+'">Llega tarde con frecuencia</label>' + 
+                                                        '</span><br />' + 
+                                                         '<span class="rdio-bx">' + 
+                                                         '     <input class="c-choice__input" id="checkbox2'+id+'" type="checkbox" name="c'+id+'" value="Falta con frecuencia a clase">' + 
+                                                         '     <label class="c-choice__label" for="checkbox2'+id+'">Falta con frecuencia a clase</label>' + 
+                                                       '</span>' + 
+                                                      '<br />' + 
+                                                      '<span class="rdio-bx">' + 
+                                                      '        <input class="c-choice__input" id="checkbox3'+id+'" type="checkbox" name="c'+id+'" value="Ya no se presenta a curso">' + 
+                                                      '        <label class="c-choice__label" for="checkbox3'+id+'">Ya no se presenta a curso</label>' + 
+                                                      '     </span>' + 
+                                                      '<br />' + 
+                                                     '<span class="rdio-bx">' + 
+                                                     '         <input class="c-choice__input" id="checkbox4'+id+'" type="checkbox" name="c'+id+'" value="Presenta problemas de disciplina">' + 
+                                                     '         <label class="c-choice__label" for="checkbox4'+id+'">Presenta problemas de disciplina</label>' + 
+                                                     '      </span>' + 
+                                                     ' <br />' + 
+                                                     '<span class="rdio-bx">' + 
+                                                     '         <input class="c-choice__input" id="checkbox5'+id+'" type="checkbox" name="c'+id+'" value="Presenta problemas de concentración">' + 
+                                                     '         <label class="c-choice__label" for="checkbox5'+id+'">Presenta problemas de concentración</label>' + 
+                                                     '      </span>' + 
+                                                     ' <br />' + 
+                                                     ' <span class="rdio-bx">' + 
+                                                     '         <input class="c-choice__input" id="checkbox6'+id+'" type="checkbox" name="c'+id+'" value="No manifiesta interés por el curso">' + 
+                                                     '         <label class="c-choice__label" for="checkbox6'+id+'">No manifiesta interés por el curso</label>' + 
+                                                     '      </span>' + 
+                                                     ' <br />' + 
+                                                     '<span class="rdio-bx">' + 
+                                                     '         <input class="c-choice__input" id="checkbox7'+id+'" type="checkbox" name="c'+id+'" value="No cumple con trabajos tareas y/o presentación de exámenes">' + 
+                                                     '         <label class="c-choice__label" for="checkbox7'+id+'">No cumple con trabajos, tareas y/o presentación de exámenes</label>' + 
+                                                     '      </span>' + 
+                                                     ' <br />' + 
+                                                     '<span class="rdio-bx">' + 
+                                                     '         <input class="c-choice__input" id="checkbox8'+id+'" type="checkbox" name="c'+id+'" value="Carece del dominio de conceptos académicos básicos para el curso">' + 
+                                                     '         <label class="c-choice__label" for="checkbox8'+id+'">Carece del dominio de conceptos académicos básicos para el curso</label>' + 
+                                                     '      </span>' + 
+                                                  '</div>  ';
+            $('#o' + id).empty().append(apnd);
+            $('#' + id).attr( "style", "display: none !important; width:120;" );
+            $('#g' + id).attr( "style", "display: block !important; width:120;" );
+            e.preventDefault();
+        });
+
+        //evento click del boton guardar
+         $(document).on('click', '.guardar', function (e) {
+            //obtener el id del boton
+             var id = this.id;
+             itemid = id.substring(1, id.length);
+             //obtener los valores de las cajas de texto
+             var cal = $('#c' + itemid).val();
+             var asis = $('#a' + itemid).val();
+
+              //grt selected items from listbox
+             var observaciones_chk = [];
+             //alert("name of checks: c" + itemid);
+              $.each($("input[name='c" + itemid + "']:checked"), function () {
+                  observaciones_chk.push($(this).val());
+              });
+
+             var obs = observaciones_chk.join(", ");
+
+
+             //alert('id: ' + itemid + ' | cal: ' + cal + " | asis: " + asis + " | " + obs );
+
+             //guardar en la base de datos mandando llmaar el webservice Editar
+             $.ajax({
+                  type: "POST",
+                  url: "capturas.asmx/Actualizar",
+                  data: "id_ep=" + itemid + "&calificacion=" + cal + "&observaciones=" + obs + "&asistencia=" + asis, // the data in form-encoded format, ie as it would appear on a querystring
+                  //contentType: "application/x-www-form-urlencoded; charset=UTF-8", // if you are using form encoding, this is default so you don't need to supply it
+                  dataType: "text", // the data type we want back, so text.  The data will come wrapped in xml
+                  success: function (data) {
+                      //$('#tabla').load(location.href + ' #tabla>*', "");
+                      //location.reload();
+                      //alert(data);
+                       $.toast({
+                            text: data, // Text that is to be shown in the toast
+                            heading: 'Correcto!', // Optional heading to be shown on the toast
+                            icon: 'success', // Type of toast icon
+                            showHideTransition: 'slide', // fade, slide or plain
+                            allowToastClose: true, // Boolean value true or false
+                            hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                            stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                            position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values         
+                            textAlign: 'left',  // Text alignment i.e. left, right or center
+                            loader: true,  // Whether to show loader or not. True by default
+                            loaderBg: '#9EC600',  // Background color of the toast loader
+                        });
+                        //actualizamos la vista de los controles
+                         $('#' + itemid).attr( "style", "display: block !important; width:120;" );
+                         $('#g' + itemid).attr("style", "display: none !important; width:120;");
+                         $('#c' + id).prop("disabled", true);
+                         $('#a' + id).prop("disabled", true);
+                         apnd2 = '<small>' + obs + '</small>';
+                         $('#o' + itemid).empty().append(apnd2);
+                  }
+              });
+
+             
+             e.preventDefault();
+        });
+
+
+    </script>
 </body>
 </html>

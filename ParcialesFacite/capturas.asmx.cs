@@ -44,6 +44,30 @@ namespace ParcialesFacite
         }
 
         [WebMethod]
+        public string Ignorar(string grupo_alumno, string materia, string maestro)
+        {
+            string constr = ConfigurationManager.ConnectionStrings["mycon"].ConnectionString;
+            try
+            {
+                using (SqlConnection con = new SqlConnection(constr))
+                {
+                    using (SqlCommand cmd = new SqlCommand("INSERT INTO Evaluaciones_Parciales VALUES (" + grupo_alumno + ", " + materia + ", 0,'Ignorado de la evaluacion'," + maestro + ",0,'ignorado')"))
+                    {
+                        cmd.Connection = con;
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                        con.Close();
+                    }
+                }
+                return "Alumno ignorado correctamente";
+            }
+            catch (Exception err)
+            {
+                return err.Message;
+            }
+        }
+
+        [WebMethod]
         public string Actualizar(string id_ep, string calificacion, string observaciones, string asistencia)
         {
             string constr = ConfigurationManager.ConnectionStrings["mycon"].ConnectionString;

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="ParcialesFacite.admin.Default" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="info_grupos.aspx.cs" Inherits="ParcialesFacite.admin.info_grupos" %>
 
 <!DOCTYPE html>
 <html>
@@ -67,61 +67,7 @@
 <div class="panel-content">
     <div class="filter-items">
         <div class="row grid-wrap mrg20">
-           <div class="col-md-4 grid-item col-sm-12 col-lg-3">
-                <div class="stat-box widget bg-clr1">
-                    <div class="wdgt-ldr">
-                        <div class="ball-scale-multiple">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                    </div>
-                    <i class="ion-android-contacts"></i>
-                    <div class="stat-box-innr">
-                        <asp:SqlDataSource runat="server" ID="SqlDataSourceGruposAsignados" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT count(*) as 'grupos' FROM Grupos">
-                          </asp:SqlDataSource>   
-                        <span>
-                            <i class="counter">
-                                 <asp:Repeater ID="RepeaterGrupos" runat="server" DataSourceID="SqlDataSourceGruposAsignados">
-                                     <ItemTemplate>
-                                        <%# Eval("grupos") %>
-                                     </ItemTemplate>
-                                 </asp:Repeater>
-                            </i>
-                        </span>
-                        <h5>Grupos Registrados</h5>
-                    </div>
-                    <span><a href="grupos.aspx"><i class="ion-eye"></i> Ver los Grupos Registrados</a></span>
-                </div>
-            </div>
 
-            <div class="col-md-4 grid-item col-sm-12 col-lg-3">
-                <div class="stat-box widget bg-clr2">
-                    <div class="wdgt-ldr">
-                        <div class="ball-scale-multiple">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                    </div>
-                    <i class="ion-android-check"></i>
-                    <div class="stat-box-innr">
-                        <asp:SqlDataSource runat="server" ID="SqlDataSourceMaestrosAsignados" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT count(id_maestro) as 'asignaciones' FROM Maestros_Grupos">
-                          </asp:SqlDataSource>   
-                        <span>
-                            <i class="counter">
-                                 <asp:Repeater ID="RepeaterMaestrosAsignados" runat="server" DataSourceID="SqlDataSourceMaestrosAsignados">
-                                     <ItemTemplate>
-                                        <%# Eval("asignaciones") %>
-                                     </ItemTemplate>
-                                 </asp:Repeater>
-                            </i>
-                        </span>
-                        <h5>Materias Asignadas a Profesores</h5>
-                    </div>
-                    <span><a href="grupos.aspx"><i class="ion-eye"></i> Ver Materias Asignadas</a></span>
-                </div>
-            </div>
         </div><!-- Filter Items -->
 
                          <div class="widget grd">
@@ -131,41 +77,33 @@
                                            <table class="table table-striped">
                                               <thead >
                                                 <tr>
-                                                  <th style=""><b>Carrera</b></th>
-                                                  <th style=""><b>Semestre</b></th>
-                                                  <th style=""><b>Grupo</b></th>
-                                                  <th style=""><b>Turno</b></th>
-                                                  <th style=""><b>Alumnos Asignados</b></th>
-                                                  <th style=""><b>Profesores Asignados</b></th>
+                                                  <th style=""><b>Materia</b></th>
+                                                  <th style=""><b>Profesor</b></th>
+                                                  <th style=""><b>Capturados</b></th>
+                                                   <th style="text-align:center"><b>Faltantes</b></th>
                                                   <th style=""></th>
                                                 </tr>
                                               </thead>
                                               <tbody>
                                         </HeaderTemplate>
                                       <ItemTemplate>
-                                         <tr class="is-disabled" id="td<%# Eval("id_grupo") %>">
+                                         <tr class="is-disabled">
                                              
                                               <td><div class="o-media">
                                                   <div class="o-media__body">
-                                                    <small><b><%# Eval("NombreCarrera") %></b></small>
+                                                    <small><b><%# Eval("NombreMateria") %></b></small>
                                                   </div>
                                                 </div></td>
                                               <td>
-                                                 <small> <%# Eval("Semestre") %></small>
+                                                 <small> <%# Eval("nombre_maestro") %></small>
                                               </td>
                                              <td>
-                                                 <small> <%# Eval("grupo") %></small></td>
+                                                 <small> <%# Eval("capturados") %></small></td>
+                                           
+                                                  <td>
+                                                 <small> <%# Eval("faltantes") %></small></td>
                                               <td>
-                                                 <small> <%# Eval("turno") %></small>
-                                              </td>
-                                             <td>
-                                                 <small> <%# Eval("alumnos_asignados") %></small>
-                                             </td>
-                                             <td>
-                                                 <small> <%# Eval("maestros_asignados") %></small>
-                                             </td>
-                                              <td>
-                                                <a href="info_grupos.aspx?grupo=<%# Eval("id_grupo") %>" title="" class="brd-rd30 btn btn-sm btn-success"><i class="fa fa-eye"></i> Información</a>
+                                                <a href="info_evaluados.aspx?grupo=<%# Eval("id_grupo") %>&maestro=<%# Eval("id_maestro") %>&materia=<%# Eval("idMateria") %>" title="" class="brd-rd30 btn btn-sm btn-success"><i class="fa fa-eye"></i> Visualizar</a>
                                              </td>
                                             </tr>
                                       </ItemTemplate>
@@ -175,13 +113,23 @@
                                            </FooterTemplate>
                                   </asp:Repeater>
                             <asp:SqlDataSource runat="server" ID="SqlDataSourceLista" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="
-SELECT Grupos_Alumnos.id_grupo,Carrera.NombreCarrera, Grupos.Semestre, Grupos.grupo, Grupos.turno, count(*) as 'alumnos_asignados', (SELECT count(*) FROM Maestros_grupos WHERE id_grupo = Grupos_Alumnos.id_grupo) as 'maestros_asignados' 
-FROM Grupos_Alumnos 
-inner join Grupos on Grupos_Alumnos.id_grupo = Grupos.id_grupo
-inner join Carrera on Grupos.carrera = Carrera.idCarrera
-group by Carrera.NombreCarrera, Grupos.Semestre, Grupos_Alumnos.id_grupo, Grupos.grupo, Grupos.turno
-order by  Grupos.Semestre">
-                                       
+                               
+SELECT id_maestro_grupo, Maestros_Grupos.id_maestro, Maestros_Grupos.id_grupo, idMateria, NombreMateria, nombre_maestro, (select count(id_ep) from Evaluaciones_Parciales as ep 
+inner join Grupos_Alumnos ga on ep.grupo_alumno = ga.id_grupo_alumno
+inner join Alumno al on ga.numCuenta = al.numCuenta
+where materia = Materias.idMateria and maestro = Maestros_Grupos.id_maestro and ga.id_grupo = Maestros_Grupos.id_grupo) as 'capturados',
+((SELECT count(*) FROM Grupos_Alumnos WHERE id_grupo = Maestros_Grupos.id_grupo) - (select count(id_ep) from Evaluaciones_Parciales as ep 
+inner join Grupos_Alumnos ga on ep.grupo_alumno = ga.id_grupo_alumno
+inner join Alumno al on ga.numCuenta = al.numCuenta
+where materia = Materias.idMateria and maestro = Maestros_Grupos.id_maestro and ga.id_grupo = Maestros_Grupos.id_grupo)) as 'faltantes'
+FROM Maestros_Grupos
+inner join Materias on Maestros_Grupos.id_materia =  Materias.idMateria
+inner join Maestros on Maestros_Grupos.id_maestro = Maestros.id_maestro
+WHERE Maestros_Grupos.id_grupo = @grupo
+">
+                                       <SelectParameters>
+                                          <asp:QueryStringParameter QueryStringField="grupo" DefaultValue="0" Name="grupo"></asp:QueryStringParameter>
+                                      </SelectParameters>
                             </asp:SqlDataSource>                   
                         
                  
@@ -224,3 +172,4 @@ order by  Grupos.Semestre">
 </body>
 
 </html>
+
