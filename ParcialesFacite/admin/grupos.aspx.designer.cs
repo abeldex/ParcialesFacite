@@ -49,24 +49,6 @@ namespace ParcialesFacite.admin {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lbl_info;
         
         /// <summary>
-        /// RepeaterGrupos control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater RepeaterGrupos;
-        
-        /// <summary>
-        /// SqlDataSourceGrupos control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSourceGrupos;
-        
-        /// <summary>
         /// txt_cohorte control.
         /// </summary>
         /// <remarks>
@@ -119,5 +101,23 @@ namespace ParcialesFacite.admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btn_guardar;
+        
+        /// <summary>
+        /// RepeaterGrupos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater RepeaterGrupos;
+        
+        /// <summary>
+        /// SqlDataSourceGrupos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSourceGrupos;
     }
 }

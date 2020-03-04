@@ -3,7 +3,7 @@
 <html>
 <head>
     <!-- Meta-Information -->
-    <title>FACITE | Sistema de Parciales</title>
+    <title>Administración Sistema Integral de Profesores</title>
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="../css/color-schemes/color.css" type="text/css" title="color3">
 
 </head>
-<body class="panel-data expand-data">
+<body class="panel-data">
 <div class="topbar">
   <div class="logo">
     <h1><a href="#" title=""><img src="../images/logo.svg" alt="" Height="50"/></a></h1>
@@ -38,22 +38,21 @@
   </div>
 </div><!-- Topbar -->
 
-<header class="side-header expand-header">
+<header class="side-header">
   <div class="nav-head">Menu Principal<span class="menu-trigger"><i class="ion-android-menu"></i></span></div>
   <nav class="custom-scrollbar">
     <ul class="drp-sec">
-      <li><a href="/admin/" title=""><i class="ion-home"></i><span>Inicio</span></a>
+      <li><a href="http://facitesistemas.gearhostpreview.com/admin/" title=""><i class="ion-home"></i><span>Inicio</span></a>
         
       </li>
     </ul>
     <h4>Administración</h4>
     <ul class="drp-sec">
-      <li><a href="grupos.aspx" title=""><i class="ion-android-contacts"></i> <span>Grupos</span></a></li>
+      <li><a href="http://facitesistemas.gearhostpreview.com/admin/grupos.aspx" title=""><i class="ion-android-contacts"></i> <span>Grupos</span></a></li>
       <li class="has-drp"><a href="#" title=""><i class="ion-android-clipboard"></i> <span>Resultados</span></a>
         <ul class="sb-drp">
-          <li><a href="#" title="">Por Grupo</a></li>
-          <li><a href="#" title="">Por Alumno</a></li>
-          <li><a href="#" title="">Por Materia</a></li>
+          <li><a href="http://facitesistemas.gearhostpreview.com/admin/reportes/reporte_alumno.aspx" title="">Por Alumno</a></li>
+		  <li><a href="http://facitesistemas.gearhostpreview.com/admin/reportes/reporte_materia.aspx" title="">Por Materia</a></li>
         </ul>
       </li>
       <li><a href="#" title=""><i class="ion-android-contact"></i> <span>Profesores</span></a></li>
@@ -144,9 +143,9 @@
                                                   </div>
                                                 </div></td>
                                               <td>
-                                                  <input disabled class="brd-rd5" type="text" id="c<%# Eval("id_ep") %>" value="<%# Eval("calificacion") %>"></td>
+                                                  <input style="color:green; font-weight: bold; text-align:center;" disabled class="brd-rd5" type="text" id="c<%# Eval("id_ep") %>" value="<%# Eval("calificacion") %>"></td>
                                              <td>
-                                                  <input disabled class="brd-rd5" type="text"  id="a<%# Eval("id_ep") %>" value="<%# Eval("asistencia") %>"></td>
+                                                  <input style="color:green; font-weight: bold; text-align:center;" disabled class="brd-rd5" type="text"  id="a<%# Eval("id_ep") %>" value="<%# Eval("asistencia") %>"></td>
                                               <td id="o<%# Eval("id_ep") %>">
                                                   <small><%# Eval("observaciones") %></small>
                                               </td>
@@ -162,9 +161,10 @@
 select id_ep, grupo_alumno, materia, calificacion, observaciones, maestro, asistencia, estado, id_grupo, al.numCuenta, NombreAlumno from Evaluaciones_Parciales as ep 
 inner join Grupos_Alumnos ga on ep.grupo_alumno = ga.id_grupo_alumno
 inner join Alumno al on ga.numCuenta = al.numCuenta
-where materia = @materia and maestro = @maestro and ga.id_grupo = @grupo">
+where materia = @materia and maestro = @maestro and ga.id_grupo = @grupo and parcial = @parcial">
                                 <SelectParameters>
                                     <asp:QueryStringParameter DefaultValue="0" Name="grupo" QueryStringField="grupo"  Type="Int32"/>
+									<asp:QueryStringParameter DefaultValue="0" Name="parcial" QueryStringField="parcial"  Type="Int32"/>
                                     <asp:QueryStringParameter QueryStringField="maestro" DefaultValue="0" Name="maestro"  Type="Int32"/>
                                     <asp:QueryStringParameter QueryStringField="materia" DefaultValue="0" Name="materia"  Type="Int32"/>
                                 </SelectParameters>

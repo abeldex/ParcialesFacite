@@ -28,7 +28,7 @@ namespace ParcialesFacite
                 {
                     respuesta.InnerText = "Login Sucess......!!";
                     Session["usuario"] = txt_num_empleado.Value;
-                    Response.Redirect("/SistemaParciales/");
+                    Response.Redirect("/");
                 }
                 else
                 {

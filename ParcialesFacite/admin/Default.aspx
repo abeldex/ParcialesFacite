@@ -4,7 +4,7 @@
 <html>
 <head>
     <!-- Meta-Information -->
-    <title>Zawya Admin Panel</title>
+    <title>Administración Sistema Integral de Profesores</title>
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="../css/color-schemes/color.css" type="text/css" title="color3">
 </head>
 
-<body class="panel-data expand-data">
+<body class="panel-data">
         <form runat="server">
 <div class="topbar">
   <div class="logo">
@@ -40,25 +40,24 @@
   </div>
 </div><!-- Topbar -->
 
-<header class="side-header expand-header">
+<header class="side-header">
   <div class="nav-head">Menu Principal<span class="menu-trigger"><i class="ion-android-menu"></i></span></div>
   <nav class="custom-scrollbar">
     <ul class="drp-sec">
-      <li><a href="#" title=""><i class="ion-home"></i><span>Inicio</span></a>
+      <li><a href="http://facitesistemas.gearhostpreview.com/admin/" title=""><i class="ion-home"></i><span>Inicio</span></a>
         
       </li>
     </ul>
     <h4>Administración</h4>
     <ul class="drp-sec">
-      <li><a href="grupos.aspx" title=""><i class="ion-android-contacts"></i> <span>Grupos</span></a></li>
+      <li><a href="http://facitesistemas.gearhostpreview.com/admin/grupos.aspx" title=""><i class="ion-android-contacts"></i> <span>Grupos</span></a></li>
       <li class="has-drp"><a href="#" title=""><i class="ion-android-clipboard"></i> <span>Resultados</span></a>
         <ul class="sb-drp">
-          <li><a href="#" title="">Por Grupo</a></li>
-          <li><a href="#" title="">Por Alumno</a></li>
-          <li><a href="#" title="">Por Materia</a></li>
+          <li><a href="http://facitesistemas.gearhostpreview.com/admin/reportes/reporte_alumno.aspx" title="">Por Alumno</a></li>
+		  <li><a href="http://facitesistemas.gearhostpreview.com/admin/reportes/reporte_materia.aspx" title="">Por Materia</a></li>
         </ul>
       </li>
-      <li><a href="#" title=""><i class="ion-android-contact"></i> <span>Profesores</span></a></li>
+      <li><a href="http://facitesistemas.gearhostpreview.com/admin/profesores.aspx" title=""><i class="ion-android-contact"></i> <span>Profesores</span></a></li>
     </ul>   
   </nav>
 </header><!-- Side Header -->
@@ -78,7 +77,7 @@
                     </div>
                     <i class="ion-android-contacts"></i>
                     <div class="stat-box-innr">
-                        <asp:SqlDataSource runat="server" ID="SqlDataSourceGruposAsignados" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT count(*) as 'grupos' FROM Grupos">
+                        <asp:SqlDataSource runat="server" ID="SqlDataSourceGruposAsignados" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT count(*) as 'grupos' FROM Grupos WHERE cohorte = '2019-2020'">
                           </asp:SqlDataSource>   
                         <span>
                             <i class="counter">
@@ -104,9 +103,12 @@
                             <div></div>
                         </div>
                     </div>
-                    <i class="ion-android-check"></i>
+                   <i class="ion-android-clipboard"></i>
                     <div class="stat-box-innr">
-                        <asp:SqlDataSource runat="server" ID="SqlDataSourceMaestrosAsignados" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT count(id_maestro) as 'asignaciones' FROM Maestros_Grupos">
+                        <asp:SqlDataSource runat="server" ID="SqlDataSourceMaestrosAsignados" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT count(id_maestro) as 'asignaciones' FROM Maestros_Grupos
+                          inner join Grupos on Maestros_Grupos.id_grupo = Grupos.id_grupo
+                          WHERE Grupos.cohorte = '2019-2020'
+                          ">
                           </asp:SqlDataSource>   
                         <span>
                             <i class="counter">
@@ -122,6 +124,46 @@
                     <span><a href="grupos.aspx"><i class="ion-eye"></i> Ver Materias Asignadas</a></span>
                 </div>
             </div>
+
+            <div class="col-md-4 grid-item col-sm-12 col-lg-3">
+                <div class="stat-box widget bg-clr6">
+                    <div class="wdgt-ldr">
+                        <div class="ball-scale-multiple">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <i class="ion-android-alarm"></i>
+                    <div class="stat-box-innr">
+                        
+                        <h5>Evaluaciones Faltantes</h5>
+                        <span>Periodo 1</span>
+                    </div>
+                    <span><a href="reportes/reporte_faltantes_p1.aspx?ciclo=2019-2020"><i class="ion-eye"></i> Ver las Evaluaciones Faltantes</a></span>
+                </div>
+            </div>
+
+            <div class="col-md-4 grid-item col-sm-12 col-lg-3">
+              <div class="stat-box widget bg-clr6">
+                  <div class="wdgt-ldr">
+                      <div class="ball-scale-multiple">
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                      </div>
+                  </div>
+                  <i class="ion-android-alarm"></i>
+                  <div class="stat-box-innr">
+                      
+                      <h5>Evaluaciones Faltantes</h5>
+                      <span>Periodo 2</span>
+                  </div>
+                  <span><a href="reportes/reporte_faltantes.aspx?ciclo=2019-2020"><i class="ion-eye"></i> Ver las Evaluaciones Faltantes</a></span>
+              </div>
+          </div>
+
+
         </div><!-- Filter Items -->
 
                          <div class="widget grd">
@@ -165,7 +207,9 @@
                                                  <small> <%# Eval("maestros_asignados") %></small>
                                              </td>
                                               <td>
-                                                <a href="info_grupos.aspx?grupo=<%# Eval("id_grupo") %>" title="" class="brd-rd30 btn btn-sm btn-success"><i class="fa fa-eye"></i> Información</a>
+                                                <a href="info_grupos.aspx?grupo=<%# Eval("id_grupo") %>&parcial=1" title="" class="brd-rd30 btn btn-sm btn-success"><i class="fa fa-eye"></i> Parcial 1</a>
+                                                <a href="info_grupos.aspx?grupo=<%# Eval("id_grupo") %>&parcial=2" title="" class="brd-rd30 btn btn-sm btn-success"><i class="fa fa-eye"></i> Parcial 2</a>
+                                             
                                              </td>
                                             </tr>
                                       </ItemTemplate>
@@ -179,6 +223,7 @@ SELECT Grupos_Alumnos.id_grupo,Carrera.NombreCarrera, Grupos.Semestre, Grupos.gr
 FROM Grupos_Alumnos 
 inner join Grupos on Grupos_Alumnos.id_grupo = Grupos.id_grupo
 inner join Carrera on Grupos.carrera = Carrera.idCarrera
+WHERE Grupos.cohorte = '2019-2020'
 group by Carrera.NombreCarrera, Grupos.Semestre, Grupos_Alumnos.id_grupo, Grupos.grupo, Grupos.turno
 order by  Grupos.Semestre">
                                        

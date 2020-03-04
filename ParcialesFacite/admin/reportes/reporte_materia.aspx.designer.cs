@@ -7,99 +7,81 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ParcialesFacite {
+namespace ParcialesFacite.admin.reportes {
     
     
-    public partial class listadoalumnos {
+    public partial class reporte_materia {
         
         /// <summary>
-        /// lbl_usuario control.
+        /// ScriptManager1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor lbl_usuario;
+        protected global::System.Web.UI.ScriptManager ScriptManager1;
         
         /// <summary>
-        /// form1 control.
+        /// txt_materia control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.WebControls.TextBox txt_materia;
         
         /// <summary>
-        /// lvMateria control.
+        /// AutoCompleteExtender1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView lvMateria;
+        protected global::AjaxControlToolkit.AutoCompleteExtender AutoCompleteExtender1;
         
         /// <summary>
-        /// SqlDataSourceAsignatura control.
+        /// btn_guardar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSourceAsignatura;
+        protected global::System.Web.UI.HtmlControls.HtmlButton btn_guardar;
         
         /// <summary>
-        /// qsgrupo control.
+        /// ButtonSearch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl qsgrupo;
+        protected global::System.Web.UI.WebControls.Button ButtonSearch;
         
         /// <summary>
-        /// qsmateria control.
+        /// lbl_alumno control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl qsmateria;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lbl_alumno;
         
         /// <summary>
-        /// qsmaestro control.
+        /// Repeater1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl qsmaestro;
+        protected global::System.Web.UI.WebControls.Repeater Repeater1;
         
         /// <summary>
-        /// qsparcial control.
+        /// GridDataSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl qsparcial;
-        
-        /// <summary>
-        /// RepeaterLista control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater RepeaterLista;
-        
-        /// <summary>
-        /// SqlDataSourceLista control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSourceLista;
+        protected global::System.Web.UI.WebControls.SqlDataSource GridDataSource;
     }
 }

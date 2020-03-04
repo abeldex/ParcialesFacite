@@ -118,7 +118,7 @@
                     <div class="col-lg-6">
                         <div class="c-card">
                             <h4>Alumnos Asignados</h4>
-                           
+                            
                                   <!--Aqui pondremos el repeater -->
                                   <asp:Repeater ID="RepeaterGrupos" runat="server" DataSourceID="SqlDataSourceGrupos">
                                           <HeaderTemplate>

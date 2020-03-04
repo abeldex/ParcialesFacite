@@ -70,7 +70,7 @@
         <i></i>
         
         <div class="usr-ft">
-          <a class="btn-danger" href="http://148.227.28.3/SistemaParciales/salir.aspx" title=""><i class="fa fa-sign-out"></i> Salir</a>
+          <a class="btn-danger" href="http://facitesistemas.gearhostpreview.com/salir.aspx" title=""><i class="fa fa-sign-out"></i> Salir</a>
         </div>
       </div>
     </div>
@@ -92,7 +92,7 @@
     <ul class="drp-sec">
       <li class="has-drp"><a href="#" title=""><i class="ion-home"></i> <span>Inicio</span></a>
         <ul class="sb-drp">
-          <li><a href="http://148.227.28.3/SistemaParciales/" title="">Panel de Control</a></li>
+          <li><a href="http://facitesistemas.gearhostpreview.com/" title="">Panel de Control</a></li>
         </ul>
       </li>
     </ul>
@@ -101,7 +101,7 @@
       <li class="has-drp"><a href="#" title=""><i class="ion-briefcase"></i> <span>Evaluaciones Parciales</span></a>
         <ul class="sb-drp">
           <li><a href="capturar.aspx" title="">Grupos Asignados</a></li>
-          <li><a href="#" title="">Grupos Capturados</a></li>
+          <li><a href="capturados.aspx" title="">Grupos Capturados</a></li>
                  </ul>
       </li>
     
@@ -128,7 +128,7 @@
                                            <table class="table table-striped">
                                               <thead>
                                                 <tr>
-                                                  <th >Carrera</th>
+                                                  <th >Programa Educativo</th>
                                                   <th >Semestre</th>
                                                   <th >Grupo</th>
                                                   <th >Materia</th>
@@ -147,7 +147,8 @@
                                               </td>
                                               <td >
                                                 <div class="c-dropdown dropdown">
-                                                    <a href="listadoalumnos.aspx?grupo=<%# Eval("id_grupo") %>&materia=<%# Eval("idMateria") %>" title="" class="brd-rd30 btn btn-sm btn-success"><i class="fa fa-edit"></i> Evaluar</a>
+                                                    <a href="listadoalumnos.aspx?grupo=<%# Eval("id_grupo") %>&materia=<%# Eval("idMateria") %>&parcial=1" title="" class="brd-rd30 btn btn-sm btn-success"><i class="fa fa-edit"></i> Evaluar 1er Periodo</a>
+                                                    <a href="listadoalumnos.aspx?grupo=<%# Eval("id_grupo") %>&materia=<%# Eval("idMateria") %>&parcial=2" title="" class="brd-rd30 btn btn-sm btn-success"><i class="fa fa-edit"></i> Evaluar 2do Periodo</a>
                                                   </div>
                                                 </div>
                                               </td>
@@ -162,7 +163,7 @@
                                   <asp:SqlDataSource runat="server" ID="SqlDataSourceGrupos" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT * FROM Grupos inner join Maestros_Grupos on Grupos.id_grupo = Maestros_Grupos.id_grupo
 inner join Materias on Maestros_Grupos.id_materia = Materias.idMateria
 inner join Carrera on Grupos.carrera = Carrera.idCarrera
-WHERE id_maestro = @maestro">
+WHERE id_maestro = @maestro and Grupos.cohorte = '2019-2020'">
                                       <SelectParameters>
                                           <asp:SessionParameter DefaultValue="0" Name="maestro" SessionField="usuario" />
                                       </SelectParameters>

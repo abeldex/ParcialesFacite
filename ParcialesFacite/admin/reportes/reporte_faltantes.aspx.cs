@@ -5,14 +5,13 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace ParcialesFacite.admin
+namespace ParcialesFacite.admin.reportes
 {
-    public partial class info_grupos : System.Web.UI.Page
+    public partial class reporte_faltantes : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            var parcial = Request.QueryString["parcial"].ToString();
-             
+
         }
     }
 }

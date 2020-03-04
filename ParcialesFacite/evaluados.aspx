@@ -71,7 +71,7 @@
         <i></i>
         
         <div class="usr-ft">
-          <a class="btn-danger" href="http://148.227.28.3/SistemaParciales/salir.aspx" title=""><i class="fa fa-sign-out"></i> Salir</a>
+          <a class="btn-danger" href="http://facitesistemas.gearhostpreview.com/salir.aspx" title=""><i class="fa fa-sign-out"></i> Salir</a>
         </div>
       </div>
     </div>
@@ -93,7 +93,7 @@
     <ul class="drp-sec">
       <li class="has-drp"><a href="#" title=""><i class="ion-home"></i> <span>Inicio</span></a>
         <ul class="sb-drp">
-          <li><a href="http://148.227.28.3/SistemaParciales/" title="">Panel de Control</a></li>
+          <li><a href="http://facitesistemas.gearhostpreview.com/" title="">Panel de Control</a></li>
         </ul>
       </li>
     </ul>
@@ -110,7 +110,8 @@
   </nav>
 </header><!-- Side Header -->
 
- <form id="form1" runat="server" class="form-wrp">
+<form id="form1" runat="server" class="form-wrp">
+  <div  id="i_reportes">
 <div class="pg-tp">
     <i class=" ion-android-checkbox"></i>
     <div class="pr-tp-inr">
@@ -124,12 +125,13 @@
                                         </div>
                                     </LayoutTemplate>
                                 </asp:ListView>
+                                
                                 <asp:SqlDataSource runat="server" ID="SqlDataSourceAsignatura" ConnectionString='<%$ ConnectionStrings:mycon %>' SelectCommand="SELECT * FROM [Materias] WHERE ([idMateria] = @idMateria)">
                                     <SelectParameters>
                                         <asp:QueryStringParameter QueryStringField="materia" DefaultValue="" Name="idMateria" Type="Int32"></asp:QueryStringParameter>
                                     </SelectParameters>
                                 </asp:SqlDataSource>
-
+                                
         <asp:ListView ID="ListView1" runat="server" DataSourceID="SqlDataSourceGpo" DataKeyNames="id_grupo">
                                     <ItemTemplate>
                                         <small><span><%# Eval("NombreCarrera") %>  </span></small>
@@ -149,9 +151,11 @@
                                 </asp:SqlDataSource>
     </div>
 </div><!-- Page Top -->
+<button type="button" style="float:right;" class="btn btn-primary tbl_ops" ID="print"><i class=" ion-android-print"></i> Imprimir</button>
 <div class="panel-content">
         <div class="row mrg20">
-            <div class="col-md-12 col-sm-12 col-lg-12">
+            <div class="col-md-12 col-sm-12 col-lg-12" >
+                
                  <div class="widget grd">
                          <asp:Repeater ID="RepeaterLista" runat="server" DataSourceID="SqlDataSourceLista" ClientIDMode="AutoID">
                                           <HeaderTemplate>
@@ -163,7 +167,7 @@
                                                   <th style="text-align:center"><b>Valoracion</b></th>
                                                   <th style="text-align:center"><b>% Asistencia</b></th>
                                                   <th style="text-align:center"><b>Observaciones</b></th>
-                                                  <th style="text-align:center"><b>Acciones</b></th>
+                                                  <th style="text-align:center" class="tbl_ops"><b>Acciones</b></th>
                                                 </tr>
                                               </thead>
                                               <tbody>
@@ -178,15 +182,16 @@
                                                   </div>
                                                 </div></td>
                                               <td>
-                                                  <input disabled class="brd-rd5" type="text" id="c<%# Eval("id_ep") %>" value="<%# Eval("calificacion") %>"></td>
+                                                  <input style="color:green; font-weight: bold; text-align:center;" disabled class="brd-rd5" type="text" id="c<%# Eval("id_ep") %>" value="<%# Eval("calificacion") %>" type="number" onchange="handleChangeCal(this);"></td>
                                              <td>
-                                                  <input disabled class="brd-rd5" type="text"  id="a<%# Eval("id_ep") %>" value="<%# Eval("asistencia") %>"></td>
+                                                  <input style="color:green; font-weight: bold; text-align:center;" disabled class="brd-rd5" type="text"  id="a<%# Eval("id_ep") %>" value="<%# Eval("asistencia") %>" type="number" onchange="handleChangeAsis(this);"></td>
                                               <td id="o<%# Eval("id_ep") %>">
                                                   <small><%# Eval("observaciones") %></small>
                                               </td>
-                                             <td>
+                                             <td class="tbl_ops">
                                                  <button style="width:120" class="btn btn-primary editar" id="<%# Eval("id_ep") %>"><i class="ion-edit"></i>Editar</button>
                                                  <button style="width:120; display:none" class="btn btn-success guardar" id="g<%# Eval("id_ep") %>"><i class="ion-save"></i>Guardar</button>
+												 <button  style="width:120; display:none" class="btn btn-warning Delete" id="d<%# Eval("id_ep") %>"><i class="ion-android-delete"></i>Ignorar</button>
                                              </td>
                                             </tr>
                                       </ItemTemplate>
@@ -199,9 +204,10 @@
 select id_ep, grupo_alumno, materia, calificacion, observaciones, maestro, asistencia, estado, id_grupo, al.numCuenta, NombreAlumno from Evaluaciones_Parciales as ep 
 inner join Grupos_Alumnos ga on ep.grupo_alumno = ga.id_grupo_alumno
 inner join Alumno al on ga.numCuenta = al.numCuenta
-where materia = @materia and maestro = @maestro and ga.id_grupo = @grupo">
+where materia = @materia and maestro = @maestro and ga.id_grupo = @grupo and parcial = @parcial">
                                 <SelectParameters>
                                     <asp:QueryStringParameter DefaultValue="0" Name="grupo" QueryStringField="grupo" />
+									<asp:QueryStringParameter DefaultValue="0" Name="parcial" QueryStringField="parcial" />
                                     <asp:SessionParameter DefaultValue="0" Name="maestro" SessionField="usuario" />
                                     <asp:QueryStringParameter QueryStringField="materia" DefaultValue="0" Name="materia"></asp:QueryStringParameter>
                                 </SelectParameters>
@@ -211,73 +217,10 @@ where materia = @materia and maestro = @maestro and ga.id_grupo = @grupo">
                  
                  </div>
         </div>
-
-                    <div class="col-md-12 col-sm-12 col-lg-12">
-                 <div class="widget grd">
-                         <asp:Repeater ID="Repeater1" runat="server" DataSourceID="SqlDataSourceLista" ClientIDMode="AutoID">
-                                          <HeaderTemplate>
-                                             
-                                           <table class="table table-striped">
-                                              <thead >
-                                                <tr>
-                                                  <th style="text-align:center"><b>Carrera</b></th>
-                                                  <th style="text-align:center"><b>Semestre</b></th>
-                                                  <th style="text-align:center"><b>Grupo</b></th>
-                                                  <th style="text-align:center"><b>Turno</b></th>
-                                                  <th style="text-align:center"><b>Alumnos Asignados</b></th>
-                                                  <th style="text-align:center"><b>Profesores Asignados</b></th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                        </HeaderTemplate>
-                                      <ItemTemplate>
-                                         <tr class="is-disabled" id="td<%# Eval("id_grupo") %>">
-                                             
-                                              <td><div class="o-media">
-                                                  <div class="o-media__body">
-                                                    <small><b><%# Eval("NombreCarrera") %></b></small>
-                                                  </div>
-                                                </div></td>
-                                              <td>
-                                                 <small> <%# Eval("Semestre") %></small>
-                                              </td>
-                                             <td>
-                                                 <small> <%# Eval("grupo") %></small></td>
-                                              <td>
-                                                 <small> <%# Eval("turno") %></small>
-                                              </td>
-                                             <td>
-                                                 <small> <%# Eval("alumnos_asignados") %></small>
-                                             </td>
-                                             <td>
-                                                 <small> <%# Eval("maestros_asignados") %></small>
-                                             </td>
-                                            </tr>
-                                      </ItemTemplate>
-                                       <FooterTemplate>
-                                        </tbody>
-                                        </table>
-                                           </FooterTemplate>
-                                  </asp:Repeater>
-                            <asp:SqlDataSource runat="server" ID="SqlDataSource1" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="
-SELECT Grupos_Alumnos.id_grupo,Carrera.NombreCarrera, Grupos.Semestre, Grupos.grupo, Grupos.turno, count(*) as 'alumnos_asignados', (SELECT count(*) FROM Maestros_grupos WHERE id_grupo = Grupos_Alumnos.id_grupo) as 'maestros_asignados' 
-FROM Grupos_Alumnos 
-inner join Grupos on Grupos_Alumnos.id_grupo = Grupos.id_grupo
-inner join Carrera on Grupos.carrera = Carrera.idCarrera
-group by Carrera.NombreCarrera, Grupos.Semestre, Grupos_Alumnos.id_grupo, Grupos.grupo, Grupos.turno
-order by  Grupos.Semestre">
-                                       
-                            </asp:SqlDataSource>                   
-                        
-                 
-                 </div>
-        </div>
-
-
-
       </div>
 
 </div><!-- Panel Content -->
+</div>
  </form>      
     <footer>
   <span>Desarrollador: Jesús Abel Cota Dimas | 2019</span>
@@ -313,124 +256,179 @@ order by  Grupos.Semestre">
     <script src="js/styleswitcher.js" type="text/javascript"></script>
     <script src="js/main.js" type="text/javascript"></script>
     <script src="js/jquery.toast.min.js"></script>
+    <script src="js/jquery-printme.min.js" type="text/javascript"></script>    
    
 
     <script>
+        //Script para imprimir
+        $(document).on('click', '#print', function (e) {
+            e.preventDefault();
+            $(".tbl_ops").hide();
+            $("#i_reportes").printMe({ "path": ["css/main.css"] });
+            $(".tbl_ops").show();
+        });
+
         $(document).on('click', '.editar', function (e) {
             //obtener el id del boton
             var id = this.id;
-            
+
             //var obs = $('#o' + id).text();
             //habilitar las cajas de text
             $('#c' + id).prop("disabled", false);
             $('#a' + id).prop("disabled", false);
-            
-            apnd = '<span id="list_observaciones"> ' + 
-                                                        '<span class="rdio-bx">' + 
-                                                        '    <input class="c-choice__input" id="checkbox1'+id+'" type="checkbox" name="c'+id+'" value="Llega tarde con frecuencia">' + 
-                                                        '      <label class="c-choice__label" for="checkbox1'+id+'">Llega tarde con frecuencia</label>' + 
-                                                        '</span><br />' + 
-                                                         '<span class="rdio-bx">' + 
-                                                         '     <input class="c-choice__input" id="checkbox2'+id+'" type="checkbox" name="c'+id+'" value="Falta con frecuencia a clase">' + 
-                                                         '     <label class="c-choice__label" for="checkbox2'+id+'">Falta con frecuencia a clase</label>' + 
-                                                       '</span>' + 
-                                                      '<br />' + 
-                                                      '<span class="rdio-bx">' + 
-                                                      '        <input class="c-choice__input" id="checkbox3'+id+'" type="checkbox" name="c'+id+'" value="Ya no se presenta a curso">' + 
-                                                      '        <label class="c-choice__label" for="checkbox3'+id+'">Ya no se presenta a curso</label>' + 
-                                                      '     </span>' + 
-                                                      '<br />' + 
-                                                     '<span class="rdio-bx">' + 
-                                                     '         <input class="c-choice__input" id="checkbox4'+id+'" type="checkbox" name="c'+id+'" value="Presenta problemas de disciplina">' + 
-                                                     '         <label class="c-choice__label" for="checkbox4'+id+'">Presenta problemas de disciplina</label>' + 
-                                                     '      </span>' + 
-                                                     ' <br />' + 
-                                                     '<span class="rdio-bx">' + 
-                                                     '         <input class="c-choice__input" id="checkbox5'+id+'" type="checkbox" name="c'+id+'" value="Presenta problemas de concentración">' + 
-                                                     '         <label class="c-choice__label" for="checkbox5'+id+'">Presenta problemas de concentración</label>' + 
-                                                     '      </span>' + 
-                                                     ' <br />' + 
-                                                     ' <span class="rdio-bx">' + 
-                                                     '         <input class="c-choice__input" id="checkbox6'+id+'" type="checkbox" name="c'+id+'" value="No manifiesta interés por el curso">' + 
-                                                     '         <label class="c-choice__label" for="checkbox6'+id+'">No manifiesta interés por el curso</label>' + 
-                                                     '      </span>' + 
-                                                     ' <br />' + 
-                                                     '<span class="rdio-bx">' + 
-                                                     '         <input class="c-choice__input" id="checkbox7'+id+'" type="checkbox" name="c'+id+'" value="No cumple con trabajos tareas y/o presentación de exámenes">' + 
-                                                     '         <label class="c-choice__label" for="checkbox7'+id+'">No cumple con trabajos, tareas y/o presentación de exámenes</label>' + 
-                                                     '      </span>' + 
-                                                     ' <br />' + 
-                                                     '<span class="rdio-bx">' + 
-                                                     '         <input class="c-choice__input" id="checkbox8'+id+'" type="checkbox" name="c'+id+'" value="Carece del dominio de conceptos académicos básicos para el curso">' + 
-                                                     '         <label class="c-choice__label" for="checkbox8'+id+'">Carece del dominio de conceptos académicos básicos para el curso</label>' + 
-                                                     '      </span>' + 
-                                                  '</div>  ';
+
+
+            apnd = '<span id="list_observaciones"> ' +
+                '<span class="rdio-bx">' +
+                '    <input class="c-choice__input" id="checkbox1' + id + '" type="checkbox" name="c' + id + '" value="Llega tarde con frecuencia">' +
+                '      <label class="c-choice__label" for="checkbox1' + id + '">Llega tarde con frecuencia</label>' +
+                '</span><br />' +
+                '<span class="rdio-bx">' +
+                '     <input class="c-choice__input" id="checkbox2' + id + '" type="checkbox" name="c' + id + '" value="Falta con frecuencia a clase">' +
+                '     <label class="c-choice__label" for="checkbox2' + id + '">Falta con frecuencia a clase</label>' +
+                '</span>' +
+                '<br />' +
+                '<span class="rdio-bx">' +
+                '        <input class="c-choice__input" id="checkbox3' + id + '" type="checkbox" name="c' + id + '" value="Ya no se presenta a curso">' +
+                '        <label class="c-choice__label" for="checkbox3' + id + '">Ya no se presenta a curso</label>' +
+                '     </span>' +
+                '<br />' +
+                '<span class="rdio-bx">' +
+                '         <input class="c-choice__input" id="checkbox4' + id + '" type="checkbox" name="c' + id + '" value="Presenta problemas de disciplina">' +
+                '         <label class="c-choice__label" for="checkbox4' + id + '">Presenta problemas de disciplina</label>' +
+                '      </span>' +
+                ' <br />' +
+                '<span class="rdio-bx">' +
+                '         <input class="c-choice__input" id="checkbox5' + id + '" type="checkbox" name="c' + id + '" value="Presenta problemas de concentración">' +
+                '         <label class="c-choice__label" for="checkbox5' + id + '">Presenta problemas de concentración</label>' +
+                '      </span>' +
+                ' <br />' +
+                ' <span class="rdio-bx">' +
+                '         <input class="c-choice__input" id="checkbox6' + id + '" type="checkbox" name="c' + id + '" value="No manifiesta interés por el curso">' +
+                '         <label class="c-choice__label" for="checkbox6' + id + '">No manifiesta interés por el curso</label>' +
+                '      </span>' +
+                ' <br />' +
+                '<span class="rdio-bx">' +
+                '         <input class="c-choice__input" id="checkbox7' + id + '" type="checkbox" name="c' + id + '" value="No cumple con trabajos tareas y/o presentación de exámenes">' +
+                '         <label class="c-choice__label" for="checkbox7' + id + '">No cumple con trabajos, tareas y/o presentación de exámenes</label>' +
+                '      </span>' +
+                ' <br />' +
+                '<span class="rdio-bx">' +
+                '         <input class="c-choice__input" id="checkbox8' + id + '" type="checkbox" name="c' + id + '" value="Carece del dominio de conceptos académicos básicos para el curso">' +
+                '         <label class="c-choice__label" for="checkbox8' + id + '">Carece del dominio de conceptos académicos básicos para el curso</label>' +
+                '      </span>' +
+                '</div>  ';
             $('#o' + id).empty().append(apnd);
-            $('#' + id).attr( "style", "display: none !important; width:120;" );
-            $('#g' + id).attr( "style", "display: block !important; width:120;" );
+            $('#' + id).attr("style", "display: none !important; width:120;");
+            $('#g' + id).attr("style", "display: block !important; width:120;");
+            $('#d' + id).attr("style", "display: block !important; width:120;");
+
+            e.preventDefault();
+        });
+
+        $(document).on('click', '.Delete', function (e) {
+            var id = this.id;
+            delid = id.substring(1, id.length);
+            alert(delid);
+            $.ajax({
+                type: "POST",
+                url: "capturas.asmx/ActualizarIgnorar",
+                data: "id_ep=" + delid, // the data in form-encoded format, ie as it would appear on a querystring
+                dataType: "text", // the data type we want back, so text.  The data will come wrapped in xml
+                success: function (data) {
+                    $.toast({
+                        text: data, // Text that is to be shown in the toast
+                        heading: 'Correcto!', // Optional heading to be shown on the toast
+                        icon: 'success', // Type of toast icon
+                        showHideTransition: 'slide', // fade, slide or plain
+                        allowToastClose: true, // Boolean value true or false
+                        hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                        stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                        position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values         
+                        textAlign: 'left',  // Text alignment i.e. left, right or center
+                        loader: true,  // Whether to show loader or not. True by default
+                        loaderBg: '#9EC600',  // Background color of the toast loader
+                    });
+
+
+                }
+            });
+
             e.preventDefault();
         });
 
         //evento click del boton guardar
-         $(document).on('click', '.guardar', function (e) {
+        $(document).on('click', '.guardar', function (e) {
             //obtener el id del boton
-             var id = this.id;
-             itemid = id.substring(1, id.length);
-             //obtener los valores de las cajas de texto
-             var cal = $('#c' + itemid).val();
-             var asis = $('#a' + itemid).val();
+            var id = this.id;
+            itemid = id.substring(1, id.length);
+            //obtener los valores de las cajas de texto
+            var cal = $('#c' + itemid).val();
+            var asis = $('#a' + itemid).val();
 
-              //grt selected items from listbox
-             var observaciones_chk = [];
-             //alert("name of checks: c" + itemid);
-              $.each($("input[name='c" + itemid + "']:checked"), function () {
-                  observaciones_chk.push($(this).val());
-              });
+            //grt selected items from listbox
+            var observaciones_chk = [];
+            //alert("name of checks: c" + itemid);
+            $.each($("input[name='c" + itemid + "']:checked"), function () {
+                observaciones_chk.push($(this).val());
+            });
 
-             var obs = observaciones_chk.join(", ");
+            var obs = observaciones_chk.join(", ");
 
 
-             //alert('id: ' + itemid + ' | cal: ' + cal + " | asis: " + asis + " | " + obs );
+            //alert('id: ' + itemid + ' | cal: ' + cal + " | asis: " + asis + " | " + obs );
 
-             //guardar en la base de datos mandando llmaar el webservice Editar
-             $.ajax({
-                  type: "POST",
-                  url: "capturas.asmx/Actualizar",
-                  data: "id_ep=" + itemid + "&calificacion=" + cal + "&observaciones=" + obs + "&asistencia=" + asis, // the data in form-encoded format, ie as it would appear on a querystring
-                  //contentType: "application/x-www-form-urlencoded; charset=UTF-8", // if you are using form encoding, this is default so you don't need to supply it
-                  dataType: "text", // the data type we want back, so text.  The data will come wrapped in xml
-                  success: function (data) {
-                      //$('#tabla').load(location.href + ' #tabla>*', "");
-                      //location.reload();
-                      //alert(data);
-                       $.toast({
-                            text: data, // Text that is to be shown in the toast
-                            heading: 'Correcto!', // Optional heading to be shown on the toast
-                            icon: 'success', // Type of toast icon
-                            showHideTransition: 'slide', // fade, slide or plain
-                            allowToastClose: true, // Boolean value true or false
-                            hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
-                            stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
-                            position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values         
-                            textAlign: 'left',  // Text alignment i.e. left, right or center
-                            loader: true,  // Whether to show loader or not. True by default
-                            loaderBg: '#9EC600',  // Background color of the toast loader
-                        });
-                        //actualizamos la vista de los controles
-                         $('#' + itemid).attr( "style", "display: block !important; width:120;" );
-                         $('#g' + itemid).attr("style", "display: none !important; width:120;");
-                         $('#c' + id).prop("disabled", true);
-                         $('#a' + id).prop("disabled", true);
-                         apnd2 = '<small>' + obs + '</small>';
-                         $('#o' + itemid).empty().append(apnd2);
-                  }
-              });
+            //guardar en la base de datos mandando llmaar el webservice Editar
+            $.ajax({
+                type: "POST",
+                url: "capturas.asmx/Actualizar",
+                data: "id_ep=" + itemid + "&calificacion=" + cal + "&observaciones=" + obs + "&asistencia=" + asis, // the data in form-encoded format, ie as it would appear on a querystring
+                //contentType: "application/x-www-form-urlencoded; charset=UTF-8", // if you are using form encoding, this is default so you don't need to supply it
+                dataType: "text", // the data type we want back, so text.  The data will come wrapped in xml
+                success: function (data) {
+                    //$('#tabla').load(location.href + ' #tabla>*', "");
+                    //location.reload();
+                    //alert(data);
+                    $.toast({
+                        text: data, // Text that is to be shown in the toast
+                        heading: 'Correcto!', // Optional heading to be shown on the toast
+                        icon: 'success', // Type of toast icon
+                        showHideTransition: 'slide', // fade, slide or plain
+                        allowToastClose: true, // Boolean value true or false
+                        hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                        stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                        position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values         
+                        textAlign: 'left',  // Text alignment i.e. left, right or center
+                        loader: true,  // Whether to show loader or not. True by default
+                        loaderBg: '#9EC600',  // Background color of the toast loader
+                    });
+                    //actualizamos la vista de los controles
+                    $('#' + itemid).attr("style", "display: block !important; width:120;");
+                    $('#g' + itemid).attr("style", "display: none !important; width:120;");
+                    $('#c' + id).prop("disabled", true);
+                    $('#a' + id).prop("disabled", true);
+                    apnd2 = '<small>' + obs + '</small>';
+                    $('#o' + itemid).empty().append(apnd2);
+                }
+            });
 
-             
-             e.preventDefault();
+
+            e.preventDefault();
         });
 
 
     </script>
+	
+	<script>
+        function handleChangeCal(input) {
+            if (input.value < 0) input.value = 0;
+            if (input.value > 10) input.value = 10;
+        }
+
+        function handleChangeAsis(input) {
+            if (input.value < 0) input.value = 0;
+            if (input.value > 100) input.value = 100;
+        }
+		</script>
 </body>
 </html>

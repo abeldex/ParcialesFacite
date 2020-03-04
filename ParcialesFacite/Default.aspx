@@ -94,7 +94,7 @@
     <ul class="drp-sec">
       <li class="has-drp"><a href="#" title=""><i class="ion-home"></i> <span>Inicio</span></a>
         <ul class="sb-drp">
-          <li><a href="http://148.227.28.3/SistemaParciales/" title="">Panel de Control</a></li>
+          <li><a href="http://facitesistemas.gearhostpreview.com/" title="">Panel de Control</a></li>
         </ul>
       </li>
     </ul>
@@ -103,7 +103,7 @@
       <li class="has-drp"><a href="#" title=""><i class="ion-briefcase"></i> <span>Evaluaciones Parciales</span></a>
         <ul class="sb-drp">
           <li><a href="capturar.aspx" title="">Grupos Asignados</a></li>
-          <li><a href="#" title="">Grupos Capturados</a></li>
+          <li><a href="capturados.aspx" title="">Grupos Capturados</a></li>
                  </ul>
       </li>
     
@@ -146,7 +146,9 @@
                     </div>
                     <i class="ion-android-contacts"></i>
                     <div class="stat-box-innr">
-                        <asp:SqlDataSource runat="server" ID="SqlDataSourceGruposAsignados" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT count(*) as 'grupos' FROM Maestros_Grupos WHERE id_maestro = @maestro">
+                        <asp:SqlDataSource runat="server" ID="SqlDataSourceGruposAsignados" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT count(*) as 'grupos' FROM Maestros_Grupos
+                            inner join Grupos on Grupos.id_grupo = Maestros_Grupos.id_grupo
+                            WHERE id_maestro = @maestro and Grupos.cohorte = '2019-2020'">
                          <SelectParameters>
                                           <asp:SessionParameter DefaultValue="0" Name="maestro" SessionField="usuario" />
                           </SelectParameters>  
@@ -180,7 +182,7 @@
                     <asp:SqlDataSource runat="server" ID="SqlDataSource1" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT count(*) as 'evaluados' FROM Grupos inner join Maestros_Grupos on Grupos.id_grupo = Maestros_Grupos.id_grupo
 inner join Materias on Maestros_Grupos.id_materia = Materias.idMateria
 inner join Carrera on Grupos.carrera = Carrera.idCarrera
-WHERE id_maestro IN (SELECT maestro FROM Evaluaciones_Parciales WHERE materia = Materias.idMateria) and id_maestro = @maestro">
+WHERE id_maestro IN (SELECT maestro FROM Evaluaciones_Parciales WHERE materia = Materias.idMateria and Evaluaciones_Parciales.parcial = 2) and id_maestro = @maestro">
                          <SelectParameters>
                                           <asp:SessionParameter DefaultValue="0" Name="maestro" SessionField="usuario" />
                           </SelectParameters>  
@@ -201,7 +203,7 @@ WHERE id_maestro IN (SELECT maestro FROM Evaluaciones_Parciales WHERE materia = 
             </div>
 
 
-            <div class="col-md-4 grid-item col-sm-6 col-lg-3">
+                      <div class="col-md-4 grid-item col-sm-6 col-lg-3">
                 <div class="stat-box widget bg-clr6">
                     <div class="wdgt-ldr">
                         <div class="ball-scale-multiple">
@@ -236,7 +238,6 @@ WHERE id_maestro IN (SELECT maestro FROM Evaluaciones_Parciales WHERE materia = 
                     
                 </div>
             </div>
-
          </div>
      </div>
 </div><!-- Panel Content -->
@@ -315,29 +316,29 @@ WHERE id_maestro IN (SELECT maestro FROM Evaluaciones_Parciales WHERE materia = 
             var contra2 = $('#txt_pass_new').val();
             var maestro = document.getElementById('qsmaestro');
             if (contra == contra2) {
-                  $.ajax({
-                  type: "POST",
-                  url: "update_password.asmx/actualizar",
-                  data: "password=" + contra + "&maestro=" + maestro.innerText, // the data in form-encoded format, ie as it would appear on a querystring
-                  //contentType: "application/x-www-form-urlencoded; charset=UTF-8", // if you are using form encoding, this is default so you don't need to supply it
-                  dataType: "text", // the data type we want back, so text.  The data will come wrapped in xml
-                  success: function (data) {
-                      //alert('ok se actualiza');
+                $.ajax({
+                    type: "POST",
+                    url: "update_password.asmx/actualizar",
+                    data: "password=" + contra + "&maestro=" + maestro.innerText, // the data in form-encoded format, ie as it would appear on a querystring
+                    //contentType: "application/x-www-form-urlencoded; charset=UTF-8", // if you are using form encoding, this is default so you don't need to supply it
+                    dataType: "text", // the data type we want back, so text.  The data will come wrapped in xml
+                    success: function (data) {
+                        //alert('ok se actualiza');
                         Swal.fire(
-                          data,
-                          'De ahora en adelante iniciará sesión con su contraseña nueva!',
-                          'success'
+                            data,
+                            'De ahora en adelante iniciará sesión con su contraseña nueva!',
+                            'success'
                         )
                         //cerra el modal
 
                         $('#modal_password').modal('hide');
-                  }
-              });
+                    }
+                });
             }
             else {
-                 alert('Las contraseña deben de coincidir');
+                alert('Las contraseña deben de coincidir');
             }
 
-          });
+        });
     </script>
 </html>

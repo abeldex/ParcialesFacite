@@ -4,7 +4,7 @@
 <html>
 <head>
     <!-- Meta-Information -->
-    <title>Zawya Admin Panel</title>
+    <title>Administración Sistema Integral de Profesores</title>
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="../css/color-schemes/color.css" type="text/css" title="color3">
 </head>
 
-<body class="panel-data expand-data">
+<body class="panel-data">
         <form runat="server">
 <div class="topbar">
   <div class="logo">
@@ -40,22 +40,21 @@
   </div>
 </div><!-- Topbar -->
 
-<header class="side-header expand-header">
+<header class="side-header">
   <div class="nav-head">Menu Principal<span class="menu-trigger"><i class="ion-android-menu"></i></span></div>
   <nav class="custom-scrollbar">
     <ul class="drp-sec">
-      <li><a href="#" title=""><i class="ion-home"></i><span>Inicio</span></a>
+      <li><a href="http://facitesistemas.gearhostpreview.com/admin/" title=""><i class="ion-home"></i><span>Inicio</span></a>
         
       </li>
     </ul>
     <h4>Administración</h4>
     <ul class="drp-sec">
-      <li><a href="grupos.aspx" title=""><i class="ion-android-contacts"></i> <span>Grupos</span></a></li>
+      <li><a href="http://facitesistemas.gearhostpreview.com/admin/grupos.aspx" title=""><i class="ion-android-contacts"></i> <span>Grupos</span></a></li>
       <li class="has-drp"><a href="#" title=""><i class="ion-android-clipboard"></i> <span>Resultados</span></a>
         <ul class="sb-drp">
-          <li><a href="#" title="">Por Grupo</a></li>
-          <li><a href="#" title="">Por Alumno</a></li>
-          <li><a href="#" title="">Por Materia</a></li>
+          <li><a href="http://facitesistemas.gearhostpreview.com/admin/reportes/reporte_alumno.aspx" title="">Por Alumno</a></li>
+		  <li><a href="http://facitesistemas.gearhostpreview.com/admin/reportes/reporte_materia.aspx" title="">Por Materia</a></li>
         </ul>
       </li>
       <li><a href="#" title=""><i class="ion-android-contact"></i> <span>Profesores</span></a></li>
@@ -103,7 +102,7 @@
                                                   <td>
                                                  <small> <%# Eval("faltantes") %></small></td>
                                               <td>
-                                                <a href="info_evaluados.aspx?grupo=<%# Eval("id_grupo") %>&maestro=<%# Eval("id_maestro") %>&materia=<%# Eval("idMateria") %>" title="" class="brd-rd30 btn btn-sm btn-success"><i class="fa fa-eye"></i> Visualizar</a>
+                                                <a href="info_evaluados.aspx?grupo=<%# Eval("id_grupo") %>&maestro=<%# Eval("id_maestro") %>&materia=<%# Eval("idMateria") %>" title="" class="brd-rd30 btn btn-sm btn-success url_visualizar"><i class="fa fa-eye"></i> Visualizar</a>
                                              </td>
                                             </tr>
                                       </ItemTemplate>
@@ -116,11 +115,11 @@
                                
 SELECT id_maestro_grupo, Maestros_Grupos.id_maestro, Maestros_Grupos.id_grupo, idMateria, NombreMateria, nombre_maestro, (select count(id_ep) from Evaluaciones_Parciales as ep 
 inner join Grupos_Alumnos ga on ep.grupo_alumno = ga.id_grupo_alumno
-inner join Alumno al on ga.numCuenta = al.numCuenta
+inner join Alumno al on ga.numCuenta = al.numCuenta and parcial = @parcial
 where materia = Materias.idMateria and maestro = Maestros_Grupos.id_maestro and ga.id_grupo = Maestros_Grupos.id_grupo) as 'capturados',
 ((SELECT count(*) FROM Grupos_Alumnos WHERE id_grupo = Maestros_Grupos.id_grupo) - (select count(id_ep) from Evaluaciones_Parciales as ep 
 inner join Grupos_Alumnos ga on ep.grupo_alumno = ga.id_grupo_alumno
-inner join Alumno al on ga.numCuenta = al.numCuenta
+inner join Alumno al on ga.numCuenta = al.numCuenta and parcial = @parcial
 where materia = Materias.idMateria and maestro = Maestros_Grupos.id_maestro and ga.id_grupo = Maestros_Grupos.id_grupo)) as 'faltantes'
 FROM Maestros_Grupos
 inner join Materias on Maestros_Grupos.id_materia =  Materias.idMateria
@@ -129,6 +128,7 @@ WHERE Maestros_Grupos.id_grupo = @grupo
 ">
                                        <SelectParameters>
                                           <asp:QueryStringParameter QueryStringField="grupo" DefaultValue="0" Name="grupo"></asp:QueryStringParameter>
+										  <asp:QueryStringParameter QueryStringField="parcial" DefaultValue="0" Name="parcial"></asp:QueryStringParameter>
                                       </SelectParameters>
                             </asp:SqlDataSource>                   
                         
@@ -168,6 +168,22 @@ WHERE Maestros_Grupos.id_grupo = @grupo
     <script src="../js/jquery.poptrox.min.js" type="text/javascript"></script>
     <script src="../js/styleswitcher.js" type="text/javascript"></script>
     <script src="../js/main.js" type="text/javascript"></script>    
+	<script>
+        $(document).ready(function () {
+            //se obtiene el parcial de la query string
+            var par = new URLSearchParams(location.search).get('parcial');
+            //alert(param);
+            //se lo agregamos al url de visualizar
+            //var _href = $(".url_visualizar").attr("href");
+            //alert(_href);
+            $(".url_visualizar").each(function () {
+                var $this = $(this);
+                var _href = $this.attr("href");
+                $this.attr("href", _href + "&parcial=" + par);
+            });
+        });
+
+	</script>
 </form>
 </body>
 

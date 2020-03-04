@@ -73,7 +73,7 @@
         <i></i>
         
         <div class="usr-ft">
-          <a class="btn-danger" href="http://148.227.28.3/SistemaParciales/salir.aspx" title=""><i class="fa fa-sign-out"></i> Salir</a>
+          <a class="btn-danger" href="http://facitesistemas.gearhostpreview.com/salir.aspx" title=""><i class="fa fa-sign-out"></i> Salir</a>
         </div>
       </div>
     </div>
@@ -95,7 +95,7 @@
     <ul class="drp-sec">
       <li class="has-drp"><a href="#" title=""><i class="ion-home"></i> <span>Inicio</span></a>
         <ul class="sb-drp">
-          <li><a href="http://148.227.28.3/SistemaParciales/" title="">Panel de Control</a></li>
+          <li><a href="http://facitesistemas.gearhostpreview.com/" title="">Panel de Control</a></li>
         </ul>
       </li>
     </ul>
@@ -141,7 +141,7 @@
                             <label id="qsgrupo" runat="server" style="display:none"></label>
                             <label id="qsmateria" runat="server" style="display:none"></label>
                             <label id="qsmaestro" runat="server" style="display:none"></label>
-
+                            <label id="qsparcial" runat="server" style="display:none"></label>
                              <asp:Repeater ID="RepeaterLista" runat="server" DataSourceID="SqlDataSourceLista" ClientIDMode="AutoID">
                                           <HeaderTemplate>
                                              
@@ -149,8 +149,8 @@
                                               <thead >
                                                 <tr>
                                                   <th style="text-align:center"><b>Alumno</b></th>
-                                                  <th style="text-align:center"><b>Valoracion</b></th>
-                                                  <th style="text-align:center"><b>% Asistencia</b></th>
+                                                  <th style="text-align:center"><b>Valoracion (0 al 10)</b></th>
+                                                  <th style="text-align:center"><b>% Asistencia (0 al 100)</b></th>
                                                   <th style="text-align:center"><b>Observaciones</b></th>
                                                   <th style="text-align:center"><b>Acciones</b></th>
                                                 </tr>
@@ -167,9 +167,9 @@
                                                   </div>
                                                 </div></td>
                                               <td>
-                                                  <input class="brd-rd5" type="text" id="c<%# Eval("id_grupo_alumno") %>"></td>
+                                                  <input class="brd-rd5" style="color:green; font-weight: bold; text-align:center;" id="c<%# Eval("id_grupo_alumno") %>" type="number" onchange="handleChangeCal(this);"></td>
                                              <td>
-                                                  <input class="brd-rd5" type="text"  id="p<%# Eval("id_grupo_alumno") %>"></td>
+                                                  <input class="brd-rd5" style="color:green; font-weight: bold; text-align:center;" type="number"  id="p<%# Eval("id_grupo_alumno") %>" onchange="handleChangeAsis(this);"></td>
                                               <td>
                                                   <span id="list_observaciones<%# Eval("numCuenta") %>">
                                                         <span class="rdio-bx">
@@ -227,10 +227,12 @@
                                   </asp:Repeater>
                             <asp:SqlDataSource runat="server" ID="SqlDataSourceLista" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT id_grupo_alumno, id_grupo, Alumno.numCuenta, NombreAlumno FROM Grupos_Alumnos 
 inner join Alumno on Grupos_Alumnos.numCuenta = Alumno.numCuenta
-where id_grupo = @grupo and id_grupo_alumno NOT IN (select grupo_alumno from Evaluaciones_Parciales where materia = @materia)">
+where id_grupo = @grupo and id_grupo_alumno NOT IN (select grupo_alumno from Evaluaciones_Parciales where materia = @materia and maestro = @maestro and parcial=@parcial)">
                                 <SelectParameters>
                                     <asp:QueryStringParameter DefaultValue="0" Name="grupo" QueryStringField="grupo" />
+									<asp:QueryStringParameter DefaultValue="0" Name="parcial" QueryStringField="parcial" />
                                     <asp:QueryStringParameter QueryStringField="materia" DefaultValue="0" Name="materia"></asp:QueryStringParameter>
+									<asp:SessionParameter Name="maestro" SessionField="usuario" DefaultValue="0" />
                                 </SelectParameters>
                                       
                             </asp:SqlDataSource>   
@@ -284,8 +286,8 @@ where id_grupo = @grupo and id_grupo_alumno NOT IN (select grupo_alumno from Eva
 
       <script>
           function SubmitButtonOnclick() {
-            alert("22");
-            return false;
+              alert("22");
+              return false;
           }
 
           $(document).on('click', '.Delete', function (e) {
@@ -293,28 +295,30 @@ where id_grupo = @grupo and id_grupo_alumno NOT IN (select grupo_alumno from Eva
               delid = id.substring(1, id.length);
               var materia = document.getElementById('qsmateria');
               var maestro = document.getElementById('qsmaestro');
+              var parcial = document.getElementById('qsparcial');
+
               $.ajax({
                   type: "POST",
                   url: "capturas.asmx/Ignorar",
-                  data: "grupo_alumno=" + delid + "&materia=" + materia.innerText + "&maestro=" + maestro.innerText, // the data in form-encoded format, ie as it would appear on a querystring
+                  data: "grupo_alumno=" + delid + "&materia=" + materia.innerText + "&maestro=" + maestro.innerText + "&parcial=" + parcial.innerText, // the data in form-encoded format, ie as it would appear on a querystring
                   //contentType: "application/x-www-form-urlencoded; charset=UTF-8", // if you are using form encoding, this is default so you don't need to supply it
                   dataType: "text", // the data type we want back, so text.  The data will come wrapped in xml
                   success: function (data) {
-                       $.toast({
-                            text: data, // Text that is to be shown in the toast
-                            heading: 'Correcto!', // Optional heading to be shown on the toast
-                            icon: 'success', // Type of toast icon
-                            showHideTransition: 'slide', // fade, slide or plain
-                            allowToastClose: true, // Boolean value true or false
-                            hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
-                            stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
-                            position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values         
-                            textAlign: 'left',  // Text alignment i.e. left, right or center
-                            loader: true,  // Whether to show loader or not. True by default
-                            loaderBg: '#9EC600',  // Background color of the toast loader
+                      $.toast({
+                          text: data, // Text that is to be shown in the toast
+                          heading: 'Correcto!', // Optional heading to be shown on the toast
+                          icon: 'success', // Type of toast icon
+                          showHideTransition: 'slide', // fade, slide or plain
+                          allowToastClose: true, // Boolean value true or false
+                          hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                          stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                          position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values         
+                          textAlign: 'left',  // Text alignment i.e. left, right or center
+                          loader: true,  // Whether to show loader or not. True by default
+                          loaderBg: '#9EC600',  // Background color of the toast loader
                       });
 
-                       
+
                   }
               });
               $(this).parent().parent().remove();
@@ -323,35 +327,35 @@ where id_grupo = @grupo and id_grupo_alumno NOT IN (select grupo_alumno from Eva
 
           $(document).on('click', '#btn_finalizar', function (event) {
               event.preventDefault();
-			  $(location).attr('href', 'http://148.227.28.3/SistemaParciales/capturar.aspx')
+              $(location).attr('href', 'http://facitesistemas.gearhostpreview.com/capturar.aspx')
               //alert('okei');
           });
 
-           $(document).ready(function () {
-              
-              $.toast({
-                text: "¡Por favor ingrese los datos solicitados para cada uno de los alumnos asignados y presione el boton Guardar correspondiente o Ignorar si el alumno no se encuentra en su grupo!", // Text that is to be shown in the toast
-                heading: 'Iniciando el Proceso de Captura de Calificaciones Parciales con sus Valoraciones!', // Optional heading to be shown on the toast
-                icon: 'info', // Type of toast icon
-                showHideTransition: 'slide', // fade, slide or plain
-                allowToastClose: true, // Boolean value true or false
-                hideAfter: 15000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
-                stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
-                position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values         
-                textAlign: 'left',  // Text alignment i.e. left, right or center
-                loader: true,  // Whether to show loader or not. True by default
-                loaderBg: '#9EC600',  // Background color of the toast loader
-               });
+          $(document).ready(function () {
 
-           });
+              $.toast({
+                  text: "¡Por favor ingrese los datos solicitados para cada uno de los alumnos asignados y presione el boton Guardar correspondiente o Ignorar si el alumno no se encuentra en su grupo!", // Text that is to be shown in the toast
+                  heading: 'Iniciando el Proceso de Captura de Calificaciones Parciales con sus Valoraciones!', // Optional heading to be shown on the toast
+                  icon: 'info', // Type of toast icon
+                  showHideTransition: 'slide', // fade, slide or plain
+                  allowToastClose: true, // Boolean value true or false
+                  hideAfter: 15000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                  stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                  position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values         
+                  textAlign: 'left',  // Text alignment i.e. left, right or center
+                  loader: true,  // Whether to show loader or not. True by default
+                  loaderBg: '#9EC600',  // Background color of the toast loader
+              });
+
+          });
 
           $(document).on('click', '.guardar', function (event) {
               event.preventDefault();
               //alert(this.id);
               var calificacion = document.getElementById('c' + this.id);
               var porcentaje = document.getElementById('p' + this.id);
-              var btn = document.getElementById(this.id);
               var ignorar = document.getElementById('d' + this.id);
+              var btn = document.getElementById(this.id);
               //alert(calificacion.value);
               //alert(porcentaje.value);
               //grt selected items from listbox
@@ -365,43 +369,44 @@ where id_grupo = @grupo and id_grupo_alumno NOT IN (select grupo_alumno from Eva
               //var grupo = document.getElementById('qsgrupo');
               var materia = document.getElementById('qsmateria');
               var maestro = document.getElementById('qsmaestro');
+              var parcial = document.getElementById('qsparcial');
               //alert(materia.innerText);
               //alert(maestro.innerText);
 
               $.ajax({
                   type: "POST",
                   url: "capturas.asmx/Insert",
-                  data: "grupo_alumno=" + this.id + "&materia=" + materia.innerText + "&calificacion=" + calificacion.value + "&observaciones=" + obs + "&maestro=" + maestro.innerText + "&asistencia=" + porcentaje.value, // the data in form-encoded format, ie as it would appear on a querystring
+                  data: "grupo_alumno=" + this.id + "&materia=" + materia.innerText + "&calificacion=" + calificacion.value + "&observaciones=" + obs + "&maestro=" + maestro.innerText + "&asistencia=" + porcentaje.value + "&parcial=" + parcial.innerText, // the data in form-encoded format, ie as it would appear on a querystring
                   //contentType: "application/x-www-form-urlencoded; charset=UTF-8", // if you are using form encoding, this is default so you don't need to supply it
                   dataType: "text", // the data type we want back, so text.  The data will come wrapped in xml
                   success: function (data) {
                       //$('#tabla').load(location.href + ' #tabla>*', "");
                       //location.reload();
                       //alert(data);
-                       $.toast({
-                            text: data, // Text that is to be shown in the toast
-                            heading: 'Correcto!', // Optional heading to be shown on the toast
-                            icon: 'success', // Type of toast icon
-                            showHideTransition: 'slide', // fade, slide or plain
-                            allowToastClose: true, // Boolean value true or false
-                            hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
-                            stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
-                            position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values         
-                            textAlign: 'left',  // Text alignment i.e. left, right or center
-                            loader: true,  // Whether to show loader or not. True by default
-                            loaderBg: '#9EC600',  // Background color of the toast loader
-                        });
+                      $.toast({
+                          text: data, // Text that is to be shown in the toast
+                          heading: 'Correcto!', // Optional heading to be shown on the toast
+                          icon: 'success', // Type of toast icon
+                          showHideTransition: 'slide', // fade, slide or plain
+                          allowToastClose: true, // Boolean value true or false
+                          hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                          stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                          position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values         
+                          textAlign: 'left',  // Text alignment i.e. left, right or center
+                          loader: true,  // Whether to show loader or not. True by default
+                          loaderBg: '#9EC600',  // Background color of the toast loader
+                      });
                       btn.disabled = true;
                       btn.innerHTML = "Capturado";
-                      ignorar.disabled = true;
                       calificacion.disabled = true;
                       observaciones.disabled = true;
                       porcentaje.disabled = true;
+                      ignorar.disabled = true;
                   }
               });
 
           });
-          
+
 
           $(document).on('click', '#btn_finalizar', function (event) {
               event.preventDefault();
@@ -409,5 +414,17 @@ where id_grupo = @grupo and id_grupo_alumno NOT IN (select grupo_alumno from Eva
           });
 
       </script>
+	  
+		<script>
+            function handleChangeCal(input) {
+                if (input.value < 0) input.value = 0;
+                if (input.value > 10) input.value = 10;
+            }
+
+            function handleChangeAsis(input) {
+                if (input.value < 0) input.value = 0;
+                if (input.value > 100) input.value = 100;
+            }
+		</script>
 </body>
 </html>

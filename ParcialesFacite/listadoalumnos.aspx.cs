@@ -19,6 +19,7 @@ namespace ParcialesFacite
                 lbl_usuario.InnerText = Session["usuario"].ToString();
                 qsgrupo.InnerText = Request.QueryString["grupo"].ToString();
                 qsmateria.InnerText = Request.QueryString["materia"].ToString();
+                qsparcial.InnerText = Request.QueryString["parcial"].ToString();
                 qsmaestro.InnerText = Session["usuario"].ToString();
             }
         }

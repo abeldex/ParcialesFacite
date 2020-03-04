@@ -69,7 +69,7 @@
         <i></i>
         
         <div class="usr-ft">
-          <a class="btn-danger" href="http://148.227.28.3/SistemaParciales/salir.aspx" title=""><i class="fa fa-sign-out"></i> Salir</a>
+          <a class="btn-danger" href="http://facitesistemas.gearhostpreview.com/salir.aspx" title=""><i class="fa fa-sign-out"></i> Salir</a>
         </div>
       </div>
     </div>
@@ -91,7 +91,7 @@
     <ul class="drp-sec">
       <li class="has-drp"><a href="#" title=""><i class="ion-home"></i> <span>Inicio</span></a>
         <ul class="sb-drp">
-          <li><a href="#" title="">Panel de Control</a></li>
+          <li><a href="http://facitesistemas.gearhostpreview.com/" title="">Panel de Control</a></li>
         </ul>
       </li>
     </ul>
@@ -127,7 +127,7 @@
                                            <table class="table table-striped">
                                               <thead>
                                                 <tr>
-                                                  <th >Carrera</th>
+                                                  <th >Programa Educativo</th>
                                                   <th >Semestre</th>
                                                   <th >Grupo</th>
                                                   <th >Materia</th>
@@ -146,7 +146,11 @@
                                               </td>
                                               <td >
                                                 <div class="c-dropdown dropdown">
-                                                    <a href="evaluados.aspx?grupo=<%# Eval("id_grupo") %>&materia=<%# Eval("idMateria") %>" title="" class="brd-rd30 btn btn-sm btn-success"><i class="fa fa-eye"></i> Visualizar</a>
+                                                    <a href="evaluados.aspx?grupo=<%# Eval("id_grupo") %>&materia=<%# Eval("idMateria") %>&parcial=1" title="" class="brd-rd30 btn btn-sm btn-success"><i class="fa fa-eye"></i> Ver Parcial 1</a>
+                                                  </div>
+                                                </div>
+												<div class="c-dropdown dropdown">
+                                                    <a href="evaluados.aspx?grupo=<%# Eval("id_grupo") %>&materia=<%# Eval("idMateria") %>&parcial=2" title="" class="brd-rd30 btn btn-sm btn-success"><i class="fa fa-eye"></i> Ver Parcial 2</a>
                                                   </div>
                                                 </div>
                                               </td>
@@ -161,7 +165,7 @@
                                   <asp:SqlDataSource runat="server" ID="SqlDataSourceGrupos" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT * FROM Grupos inner join Maestros_Grupos on Grupos.id_grupo = Maestros_Grupos.id_grupo
 inner join Materias on Maestros_Grupos.id_materia = Materias.idMateria
 inner join Carrera on Grupos.carrera = Carrera.idCarrera
-WHERE id_maestro IN (SELECT maestro FROM Evaluaciones_Parciales WHERE materia = Materias.idMateria) and id_maestro = @maestro">
+WHERE id_maestro IN (SELECT maestro FROM Evaluaciones_Parciales WHERE materia = Materias.idMateria) and id_maestro = @maestro and cohorte = '2019-2020'">
                                       <SelectParameters>
                                           <asp:SessionParameter DefaultValue="0" Name="maestro" SessionField="usuario" />
                                       </SelectParameters>
