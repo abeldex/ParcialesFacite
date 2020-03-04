@@ -18,7 +18,7 @@ namespace ParcialesFacite
     // [System.Web.Script.Services.ScriptService]
     public class capturas : System.Web.Services.WebService
     {
-
+        //Metodo para capturar una calificacion con el webservice
         [WebMethod]
         public string Insert(string grupo_alumno, string materia, string calificacion, string observaciones, string maestro, string asistencia, string parcial)
         {
