@@ -163,7 +163,7 @@
                                   <asp:SqlDataSource runat="server" ID="SqlDataSourceGrupos" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT * FROM Grupos inner join Maestros_Grupos on Grupos.id_grupo = Maestros_Grupos.id_grupo
 inner join Materias on Maestros_Grupos.id_materia = Materias.idMateria
 inner join Carrera on Grupos.carrera = Carrera.idCarrera
-WHERE id_maestro = @maestro and Grupos.cohorte = '2019-2020'">
+WHERE id_maestro = @maestro and Grupos.cohorte = '2020-2021'">
                                       <SelectParameters>
                                           <asp:SessionParameter DefaultValue="0" Name="maestro" SessionField="usuario" />
                                       </SelectParameters>

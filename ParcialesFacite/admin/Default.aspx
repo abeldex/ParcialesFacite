@@ -77,7 +77,7 @@
                     </div>
                     <i class="ion-android-contacts"></i>
                     <div class="stat-box-innr">
-                        <asp:SqlDataSource runat="server" ID="SqlDataSourceGruposAsignados" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT count(*) as 'grupos' FROM Grupos WHERE cohorte = '2019-2020'">
+                        <asp:SqlDataSource runat="server" ID="SqlDataSourceGruposAsignados" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT count(*) as 'grupos' FROM Grupos WHERE cohorte = '2020-2021'">
                           </asp:SqlDataSource>   
                         <span>
                             <i class="counter">
@@ -107,7 +107,7 @@
                     <div class="stat-box-innr">
                         <asp:SqlDataSource runat="server" ID="SqlDataSourceMaestrosAsignados" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT count(id_maestro) as 'asignaciones' FROM Maestros_Grupos
                           inner join Grupos on Maestros_Grupos.id_grupo = Grupos.id_grupo
-                          WHERE Grupos.cohorte = '2019-2020'
+                          WHERE Grupos.cohorte = '2020-2021'
                           ">
                           </asp:SqlDataSource>   
                         <span>
@@ -140,7 +140,7 @@
                         <h5>Evaluaciones Faltantes</h5>
                         <span>Periodo 1</span>
                     </div>
-                    <span><a href="reportes/reporte_faltantes_p1.aspx?ciclo=2019-2020"><i class="ion-eye"></i> Ver las Evaluaciones Faltantes</a></span>
+                    <span><a href="reportes/reporte_faltantes_p1.aspx?ciclo=2020-2021"><i class="ion-eye"></i> Ver las Evaluaciones Faltantes</a></span>
                 </div>
             </div>
 
@@ -159,7 +159,7 @@
                       <h5>Evaluaciones Faltantes</h5>
                       <span>Periodo 2</span>
                   </div>
-                  <span><a href="reportes/reporte_faltantes.aspx?ciclo=2019-2020"><i class="ion-eye"></i> Ver las Evaluaciones Faltantes</a></span>
+                  <span><a href="reportes/reporte_faltantes.aspx?ciclo=2020-2021"><i class="ion-eye"></i> Ver las Evaluaciones Faltantes</a></span>
               </div>
           </div>
 
@@ -223,7 +223,7 @@ SELECT Grupos_Alumnos.id_grupo,Carrera.NombreCarrera, Grupos.Semestre, Grupos.gr
 FROM Grupos_Alumnos 
 inner join Grupos on Grupos_Alumnos.id_grupo = Grupos.id_grupo
 inner join Carrera on Grupos.carrera = Carrera.idCarrera
-WHERE Grupos.cohorte = '2019-2020'
+WHERE Grupos.cohorte = '2020-2021'
 group by Carrera.NombreCarrera, Grupos.Semestre, Grupos_Alumnos.id_grupo, Grupos.grupo, Grupos.turno
 order by  Grupos.Semestre">
                                        

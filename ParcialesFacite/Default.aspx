@@ -148,7 +148,7 @@
                     <div class="stat-box-innr">
                         <asp:SqlDataSource runat="server" ID="SqlDataSourceGruposAsignados" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT count(*) as 'grupos' FROM Maestros_Grupos
                             inner join Grupos on Grupos.id_grupo = Maestros_Grupos.id_grupo
-                            WHERE id_maestro = @maestro and Grupos.cohorte = '2019-2020'">
+                            WHERE id_maestro = @maestro and Grupos.cohorte = '2020-2021'">
                          <SelectParameters>
                                           <asp:SessionParameter DefaultValue="0" Name="maestro" SessionField="usuario" />
                           </SelectParameters>  
@@ -182,7 +182,7 @@
                     <asp:SqlDataSource runat="server" ID="SqlDataSource1" ConnectionString='<%$ ConnectionStrings:TRAYECTORIA_ESCOLARConnectionString %>' SelectCommand="SELECT count(*) as 'evaluados' FROM Grupos inner join Maestros_Grupos on Grupos.id_grupo = Maestros_Grupos.id_grupo
 inner join Materias on Maestros_Grupos.id_materia = Materias.idMateria
 inner join Carrera on Grupos.carrera = Carrera.idCarrera
-WHERE id_maestro IN (SELECT maestro FROM Evaluaciones_Parciales WHERE materia = Materias.idMateria and Evaluaciones_Parciales.parcial = 2) and id_maestro = @maestro">
+WHERE id_maestro IN (SELECT maestro FROM Evaluaciones_Parciales WHERE materia = Materias.idMateria and Evaluaciones_Parciales.parcial = 1) and id_maestro = @maestro and Grupos.cohorte = '2020-2021'">
                          <SelectParameters>
                                           <asp:SessionParameter DefaultValue="0" Name="maestro" SessionField="usuario" />
                           </SelectParameters>  
